@@ -6,7 +6,7 @@ Itasa Flexget plugin
 
 Install
 -------
-Drop `ItasaFlexGet.py` in ~/.flexget/plugins
+Drop `ItasaFlexGet.py` in `~/.flexget/plugins`
 
 Flexget config.yml examples
 ---------------------------
