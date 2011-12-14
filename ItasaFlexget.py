@@ -48,7 +48,6 @@ class Itasa(object):
             else:
                 urls = [entry['url']]
             for url in urls:
-                log.info(url)
                 page = self.opener.open(url)
                 z = self._zip(page)
                 filename = z.headers.dict['content-disposition'].split('=')[1]
