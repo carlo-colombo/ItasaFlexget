@@ -48,14 +48,13 @@ class Itasa(object):
             else:
                 urls = [entry['url']]
             for url in urls:
-                page = self.opener.open(url)
-                z = self._zip(page)
-                filename = z.headers.dict['content-disposition'].split('=')[1]
-		filename = os.path.join(self.config['path'],filename)
-                filename = os.path.expanduser(filename)
-		f = open(filename,'w')
-                f.write(z.read())
-		f.close()
+                with self.opener.open(url) as page:
+                    z = self._zip(page)
+                    filename = z.headers.dict['content-disposition'].split('=')[1]
+                    filename = os.path.join(self.config['path'],filename)
+                    filename = os.path.expanduser(filename)
+                    with open(filename,'w') as f:
+                        f.write(z.read())
 
     def _zip(self,page):
         '''extract zip subtitle link from page, open download zip link'''
