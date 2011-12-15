@@ -1,5 +1,6 @@
 import urllib, urllib2, cookielib,urlparse
 import os
+from contextlib import closing
 from flexget.plugin import register_plugin
 
 BASE_PATH = 'http://www.italiansubs.net/index.php'
@@ -48,7 +49,7 @@ class Itasa(object):
             else:
                 urls = [entry['url']]
             for url in urls:
-                with self.opener.open(url) as page:
+                with closing(self.opener.open(url)) as page:
                     z = self._zip(page)
                     filename = z.headers.dict['content-disposition'].split('=')[1]
                     filename = os.path.join(self.config['path'],filename)
