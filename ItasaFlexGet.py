@@ -54,7 +54,7 @@ class Itasa(object):
                     filename = z.headers.dict['content-disposition'].split('=')[1]
                     filename = os.path.join(self.config['path'],filename)
                     filename = os.path.expanduser(filename)
-                    with open(filename,'w') as f:
+                    with open(filename,'wb') as f:
                         f.write(z.read())
 
     def _zip(self,page):
