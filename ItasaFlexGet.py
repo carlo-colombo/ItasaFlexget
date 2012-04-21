@@ -16,6 +16,10 @@ class Itasa(object):
       username: itasaUsername
       password: itasaPassword
       path: ~/subtitle/download/folder # absolute or starting from $HOME
+      messages:
+        - Grazie
+        - Grazie mille!!!
+        - Mitici
     """
 
     def validator(self):
