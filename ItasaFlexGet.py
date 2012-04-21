@@ -1,8 +1,7 @@
 import urllib, urllib2, cookielib,urlparse
-import os
+import os, random
 from contextlib import closing
 from flexget.plugin import register_plugin
-
 from BeautifulSoup import BeautifulSoup
 
 BASE_PATH = 'http://www.italiansubs.net/index.php'
@@ -77,7 +76,8 @@ class Itasa(object):
         arg2_dict = []
         for input in form.findAll('input'):
             if input.name == 'jc_comment':
-                arg2_dict.append([input.name,'grazie!!'])
+                m = self.config['messages']
+                arg2_dict.append([input.name,m[random.randint(0,len(m)-1)]])
             else:
                 arg2_dict.append([input.name,input.value])
 
