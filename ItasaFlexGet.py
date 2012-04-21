@@ -3,6 +3,8 @@ import os
 from contextlib import closing
 from flexget.plugin import register_plugin
 
+from BeautifulSoup import BeautifulSoup
+
 BASE_PATH = 'http://www.italiansubs.net/index.php'
 
 class Itasa(object):
@@ -64,5 +66,16 @@ class Itasa(object):
         end = content.index('" rel',start)
         url = content[start+17:end]
         return self.opener.open(url)
+
+    def _post_comment(self,page):
+        soup = BeautifulSoup(page.read())
+        form = soup.find(id='jc_commentForm')
+        data = []
+        for input in form.findAll('input'):
+            if input.name == 'jc_comment':
+                data.append([input.name,'grazie!!'])
+            else:
+                data.append([input.name,input.value])
+        self.opener.open(page.geturl(),data=str(data))
 
 register_plugin(Itasa, 'itasa')
