@@ -33,7 +33,7 @@ class Itasa(object):
 
         cj = cookielib.CookieJar()
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-        login_data = urllib.urlencode({'username' : self.config['username']
+        arg2 = urllib.urlencode({'username' : self.config['username']
                                , 'passwd' : self.config['password']
                                , 'Submit' :'Login'
                                , 'silent' : True
@@ -41,7 +41,7 @@ class Itasa(object):
                                , 'task'   : 'login'
                                , 'remember':'yes'})
         
-        self.opener.open(BASE_PATH, login_data)
+        self.opener.open(BASE_PATH, arg2)
 
     def on_feed_download(self,feed):
         '''download zip file'''
@@ -70,12 +70,19 @@ class Itasa(object):
     def _post_comment(self,page):
         soup = BeautifulSoup(page.read())
         form = soup.find(id='jc_commentForm')
-        data = []
+        arg2_dict = []
         for input in form.findAll('input'):
             if input.name == 'jc_comment':
-                data.append([input.name,'grazie!!'])
+                arg2_dict.append([input.name,'grazie!!'])
             else:
-                data.append([input.name,input.value])
-        self.opener.open(page.geturl(),data=str(data))
+                arg2_dict.append([input.name,input.value])
+
+        data = { arg2:str(arg2_dict)
+            , func: "jcxAddComment"
+            , task: "azrul_ajax"
+            , no_html: 1
+            , option : jomcomment}
+        
+        self.opener.open(page.geturl(),data)
 
 register_plugin(Itasa, 'itasa')
