@@ -77,8 +77,7 @@ class Itasa(object):
             else:
                 arg2_dict.append([input.name,input.value])
 
-        data = { 
-            , arg2   : str(arg2_dict)
+        data = { arg2: str(arg2_dict)
             , func   : "jcxAddComment"
             , task   : "azrul_ajax"
             , no_html: 1
