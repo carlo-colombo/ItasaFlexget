@@ -33,7 +33,7 @@ class Itasa(object):
 
         cj = cookielib.CookieJar()
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-        arg2 = urllib.urlencode({'username' : self.config['username']
+        login_data = urllib.urlencode({'username' : self.config['username']
                                , 'passwd' : self.config['password']
                                , 'Submit' :'Login'
                                , 'silent' : True
@@ -41,7 +41,7 @@ class Itasa(object):
                                , 'task'   : 'login'
                                , 'remember':'yes'})
         
-        self.opener.open(BASE_PATH, arg2)
+        self.opener.open(BASE_PATH, login_data)
 
     def on_feed_download(self,feed):
         '''download zip file'''
