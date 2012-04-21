@@ -83,6 +83,6 @@ class Itasa(object):
             , no_html: 1
             , option : jomcomment}
         
-        self.opener.open(page.geturl(),data)
+        self.opener.open(page.geturl(),urllib.parse.urlencode(data))
 
 register_plugin(Itasa, 'itasa')
