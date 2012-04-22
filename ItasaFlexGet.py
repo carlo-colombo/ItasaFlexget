@@ -1,7 +1,8 @@
 import urllib, urllib2, cookielib,urlparse
-import os
+import os, random
 from contextlib import closing
-from flexget.plugin import register_plugin
+from BeautifulSoup import BeautifulSoup
+import json
 
 BASE_PATH = 'http://www.italiansubs.net/index.php'
 
@@ -14,6 +15,10 @@ class Itasa(object):
       username: itasaUsername
       password: itasaPassword
       path: ~/subtitle/download/folder # absolute or starting from $HOME
+      messages:
+        - Grazie
+        - Grazie mille!!!
+        - Mitici
     """
 
     def validator(self):
@@ -56,6 +61,8 @@ class Itasa(object):
                     filename = os.path.expanduser(filename)
                     with open(filename,'wb') as f:
                         f.write(z.read())
+                    if 'messages' in self.config :
+                        self._post_comment(page)
 
     def _zip(self,page):
         '''extract zip subtitle link from page, open download zip link'''
@@ -65,4 +72,28 @@ class Itasa(object):
         url = content[start+17:end]
         return self.opener.open(url)
 
-register_plugin(Itasa, 'itasa')
+    def _post_comment(self,page):
+        soup = BeautifulSoup(page.read())
+        form = soup.find(id='jc_commentForm')
+        arg2_dict = []
+        for inputTag in form.findAll('input'):
+            if not inputTag['name'] == 'jc_name':
+                arg2_dict.append([inputTag['name'],inputTag['value'] if inputTag.has_key('value') else None])
+
+        m = self.config['messages']
+        arg2_dict.append(['jc_comment',m[random.randint(0,len(m)-1)]  ])
+        arg2_dict.append(['jc_name',self.config['username']])
+
+        data = { 'arg2': json.dumps(arg2_dict)
+            , 'func'   : "jcxAddComment"
+            , 'task'   : "azrul_ajax"
+            , 'no_html': 1
+            , 'option' : "jomcomment"}
+        
+        return self.opener.open(page.geturl(),urllib.urlencode(data))
+
+try:
+    from flexget.plugin import register_plugin
+    register_plugin(Itasa, 'itasa')
+except:
+    pass
