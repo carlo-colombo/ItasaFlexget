@@ -1,8 +1,8 @@
 import urllib, urllib2, cookielib,urlparse
 import os, random
 from contextlib import closing
-from flexget.plugin import register_plugin
 from BeautifulSoup import BeautifulSoup
+import json
 
 BASE_PATH = 'http://www.italiansubs.net/index.php'
 
@@ -61,6 +61,8 @@ class Itasa(object):
                     filename = os.path.expanduser(filename)
                     with open(filename,'wb') as f:
                         f.write(z.read())
+                    if 'messages' in self.config :
+                        self._post_comment(page)
 
     def _zip(self,page):
         '''extract zip subtitle link from page, open download zip link'''
@@ -74,19 +76,24 @@ class Itasa(object):
         soup = BeautifulSoup(page.read())
         form = soup.find(id='jc_commentForm')
         arg2_dict = []
-        for input in form.findAll('input'):
-            if input.name == 'jc_comment':
-                m = self.config['messages']
-                arg2_dict.append([input.name,m[random.randint(0,len(m)-1)]])
-            else:
-                arg2_dict.append([input.name,input.value])
+        for inputTag in form.findAll('input'):
+            if not inputTag['name'] == 'jc_name':
+                arg2_dict.append([inputTag['name'],inputTag['value'] if inputTag.has_key('value') else None])
 
-        data = { arg2: str(arg2_dict)
-            , func   : "jcxAddComment"
-            , task   : "azrul_ajax"
-            , no_html: 1
-            , option : jomcomment}
+        m = self.config['messages']
+        arg2_dict.append(['jc_comment',m[random.randint(0,len(m)-1)]  ])
+        arg2_dict.append(['jc_name',self.config['username']])
+
+        data = { 'arg2': json.dumps(arg2_dict)
+            , 'func'   : "jcxAddComment"
+            , 'task'   : "azrul_ajax"
+            , 'no_html': 1
+            , 'option' : "jomcomment"}
         
-        self.opener.open(page.geturl(),urllib.parse.urlencode(data))
+        return self.opener.open(page.geturl(),urllib.urlencode(data))
 
-register_plugin(Itasa, 'itasa')
+try:
+    from flexget.plugin import register_plugin
+    register_plugin(Itasa, 'itasa')
+except:
+    pass
