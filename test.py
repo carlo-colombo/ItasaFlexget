@@ -34,6 +34,17 @@ class ItasaFlexgetTests(unittest.TestCase):
         ifg.on_feed_download(self.feed)
         self.assertTrue(os.path.exists(self.test_item[0]))
 
+    def test_output_field(self):
+        ifg = Itasa()
+        ifg.on_process_start(self.feed) #connection
+        ifg.on_feed_download(self.feed)
+        self.assertTrue(self.feed.entries[0].has_key('output'))
+
+    def tearDown(self):
+        '''remove downloaded test item from current directory'''
+        if os.path.exists(self.test_item[0]):
+            os.remove(self.test_item[0])
+
 class FeedConfigMock(object):
     def __init__(self,username,password):
         self.config = {

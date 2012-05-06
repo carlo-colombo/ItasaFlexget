@@ -58,6 +58,7 @@ class Itasa(object):
                         filename = os.path.expanduser(filename)
                         with open(filename,'wb') as f:
                             f.write(z.read())
+                            entry['output']=filename
                     except ValueError:
                         print("Missing subtitle link in page: %s" % page.geturl())
 
