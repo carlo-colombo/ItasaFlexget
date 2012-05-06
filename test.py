@@ -52,7 +52,6 @@ class ItasaFlexgetTests(unittest.TestCase):
         if os.path.exists(self.test_item[0]):
             os.remove(self.test_item[0])
 
-
 class FeedConfigMock(object):
     def __init__(self,username,password):
         self.config = {

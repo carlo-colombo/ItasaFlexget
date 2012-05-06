@@ -44,7 +44,9 @@ class Itasa(object):
                                , 'task'   : 'login'
                                , 'remember':'yes'})
         
-        self.opener.open(BASE_PATH, login_data)
+        with closing(self.opener.open(BASE_PATH, login_data)) as page:
+            if page.read().find('Nome utente e password non sono corrette') != -1:
+                raise Exception("Wrong user or password")
 
     def on_feed_download(self,feed):
         '''download zip file'''
@@ -55,14 +57,17 @@ class Itasa(object):
                 urls = [entry['url']]
             for url in urls:
                 with closing(self.opener.open(url)) as page:
-                    z = self._zip(page)
-                    filename = z.headers.dict['content-disposition'].split('=')[1]
-                    filename = os.path.join(self.config['path'],filename)
-                    filename = os.path.expanduser(filename)
-                    with open(filename,'wb') as f:
-                        f.write(z.read())
-                    if 'messages' in self.config :
-                        self._post_comment(page)
+                    try:
+                        z = self._zip(page)
+                        filename = z.headers.dict['content-disposition'].split('=')[1]
+                        filename = os.path.join(self.config['path'],filename)
+                        filename = os.path.expanduser(filename)
+                        with open(filename,'wb') as f:
+                            f.write(z.read())
+                        if 'messages' in self.config :
+                            self._post_comment(page)
+                    except ValueError:
+                        print("Missing subtitle link in page: %s" % page.geturl())
 
     def _zip(self,page):
         '''extract zip subtitle link from page, open download zip link'''
