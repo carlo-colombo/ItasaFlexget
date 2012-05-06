@@ -20,3 +20,8 @@ feeds:
       password: itasaPassword
       path: ~/subtitle/download/folder # absolute or starting from $HOME
 ```
+
+Test
+----------------------------
+`python2 -m unittest test`
+Test will ask for itasa username and password
