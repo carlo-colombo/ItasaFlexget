@@ -25,10 +25,10 @@ class Itasa(object):
         '''validator'''
         from flexget import validator
         d = validator.factory('dict')
-        d.accept('text',key='username')
-        d.accept('text',key='password')
-        d.accept('text',key='path')
-        d.accept('list',key='messages').accept('text')
+        d.accept('text', key='username')
+        d.accept('text', key='password')
+        d.accept('text', key='path')
+        d.accept('list', key='messages').accept('text')
         return d
 
     def on_process_start(self, feed):
@@ -59,27 +59,27 @@ class Itasa(object):
             for url in urls:
                 with closing(self.opener.open(url)) as page:
                     try:
-                        z = self._zip(page)
+                        content = page.read()
+                        z = self._zip(content)
                         filename = z.headers.dict['content-disposition'].split('=')[1]
                         filename = os.path.join(self.config['path'],filename)
                         filename = os.path.expanduser(filename)
                         with open(filename,'wb') as f:
                             f.write(z.read())
                         if 'messages' in self.config :
-                            self._post_comment(page)
+                            self._post_comment(content,page.geturl())
                     except ValueError:
                         print("Missing subtitle link in page: %s" % page.geturl())
 
-    def _zip(self,page):
+    def _zip(self,content):
         '''extract zip subtitle link from page, open download zip link'''
-        content = page.read()
         start = content.index('<center><a href="')
         end = content.index('" rel',start)
         url = content[start+17:end]
         return self.opener.open(url)
 
-    def _post_comment(self,page):
-        soup = BeautifulSoup(page.read())
+    def _post_comment(self,content,url):
+        soup = BeautifulSoup(content)
         form = soup.find(id='jc_commentForm')
         arg2_dict = []
         for inputTag in form.findAll('input'):
@@ -96,7 +96,7 @@ class Itasa(object):
             , 'no_html': 1
             , 'option' : "jomcomment"}
         
-        return self.opener.open(page.geturl(),urllib.urlencode(data))
+        return self.opener.open(url,urllib.urlencode(data))
 
 try:
     from flexget.plugin import register_plugin

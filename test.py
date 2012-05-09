@@ -45,7 +45,7 @@ class ItasaFlexgetTests(unittest.TestCase):
         self.feed.config['itasa']['messages']=['Thank you','Thx']
         ifg.on_process_start(self.feed)
         with closing(ifg.opener.open(self.test_item[1])) as page:
-            ifg._post_comment(page)
+            ifg._post_comment(page.read(),page.geturl())
 
     def tearDown(self):
         '''remove downloaded test item from current directory'''
