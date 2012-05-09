@@ -34,6 +34,12 @@ class ItasaFlexgetTests(unittest.TestCase):
         ifg.on_feed_download(self.feed)
         self.assertTrue(os.path.exists(self.test_item[0]))
 
+    def test_output_field(self):
+        ifg = Itasa()
+        ifg.on_process_start(self.feed) #connection
+        ifg.on_feed_download(self.feed)
+        self.assertTrue(self.feed.entries[0].has_key('output'))
+
     def test_download_and_post_comment(self):
         ifg = Itasa()
         self.feed.config['itasa']['messages']=['Thank you','Thx']

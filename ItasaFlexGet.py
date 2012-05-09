@@ -66,6 +66,7 @@ class Itasa(object):
                         filename = os.path.expanduser(filename)
                         with open(filename,'wb') as f:
                             f.write(z.read())
+                            entry['output']=filename
                         if 'messages' in self.config :
                             self._post_comment(content,page.geturl())
                     except ValueError:
