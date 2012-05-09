@@ -1,5 +1,5 @@
 import urllib, urllib2, cookielib,urlparse
-import os, random
+import os, random, re
 from contextlib import closing
 from BeautifulSoup import BeautifulSoup
 import json
@@ -64,13 +64,25 @@ class Itasa(object):
                         filename = z.headers.dict['content-disposition'].split('=')[1]
                         filename = os.path.join(self.config['path'],filename)
                         filename = os.path.expanduser(filename)
+                        soup = BeautifulSoup(content)
                         with open(filename,'wb') as f:
                             f.write(z.read())
-                            entry['output']=filename
+                            entry['output'] = filename
                         if 'messages' in self.config :
-                            self._post_comment(content,page.geturl())
+                            self._post_comment(soup,page.geturl())
+                        self._fill_fields(entry,soup)    
                     except ValueError:
                         print("Missing subtitle link in page: %s" % page.geturl())
+
+    def _fill_fields(self,entry,soup):
+        title = soup.find(id='remositoryfileinfo').find('center').string
+        m = re.search("(.*?)[\s-]+(\d+)x(\d+)", title, re.UNICODE)
+        if m:
+            show_data = m.groups()
+            entry['title'] = title.strip()
+            entry['series_name'] = show_data[0].strip()
+            entry['series_season'] = show_data[1].strip()
+            entry['series_episode'] = show_data[2].strip()
 
     def _zip(self,content):
         '''extract zip subtitle link from page, open download zip link'''
@@ -79,8 +91,7 @@ class Itasa(object):
         url = content[start+17:end]
         return self.opener.open(url)
 
-    def _post_comment(self,content,url):
-        soup = BeautifulSoup(content)
+    def _post_comment(self,soup,url):
         form = soup.find(id='jc_commentForm')
         arg2_dict = []
         for inputTag in form.findAll('input'):

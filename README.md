@@ -3,6 +3,7 @@ Itasa Flexget plugin
 
 - [Flexget](http://www.flexget.com) 
 - [Itasa](http://italiansubs.net)
+- [ItasaFlexget forum post on Itasa](http://www.italiansubs.net/forum/hardware-software/itasa-flexget-plugin/)
 
 Install
 -------
@@ -27,7 +28,13 @@ feeds:
 
 Features
 ---------------------------
-Optional parameter messages: plugin will post a message on subtitle page, message will be choose amongst configured messages.
+* Optional parameter messages: plugin will post a message on subtitle page, message will be choose amongst configured messages.
+* Extracted fields:
+  * title
+  * output _downloaded zip path_
+  * series_name _Itasa version_
+  * series_season
+  * series_episode
 
 Test
 ----------------------------
