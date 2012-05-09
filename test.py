@@ -40,6 +40,19 @@ class ItasaFlexgetTests(unittest.TestCase):
         ifg.on_feed_download(self.feed)
         self.assertTrue(self.feed.entries[0].has_key('output'))
 
+    def test_download_and_post_comment(self):
+        ifg = Itasa()
+        self.feed.config['itasa']['messages']=['Thank you','Thx']
+        ifg.on_process_start(self.feed) #connection
+        ifg.on_feed_download(self.feed)
+
+    def test_html_parsing(self):
+        ifg = Itasa()
+        self.feed.config['itasa']['messages']=['Thank you','Thx']
+        ifg.on_process_start(self.feed)
+        with closing(ifg.opener.open(self.test_item[1])) as page:
+            ifg._post_comment(page.read(),page.geturl())
+
     def tearDown(self):
         '''remove downloaded test item from current directory'''
         if os.path.exists(self.test_item[0]):

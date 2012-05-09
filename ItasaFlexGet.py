@@ -1,6 +1,8 @@
 import urllib, urllib2, cookielib,urlparse
-import os
+import os, random
 from contextlib import closing
+from BeautifulSoup import BeautifulSoup
+import json
 
 BASE_PATH = 'http://www.italiansubs.net/index.php'
 
@@ -13,15 +15,20 @@ class Itasa(object):
       username: itasaUsername
       password: itasaPassword
       path: ~/subtitle/download/folder # absolute or starting from $HOME
+      messages:
+        - Grazie
+        - Grazie mille!!!
+        - Mitici
     """
 
     def validator(self):
         '''validator'''
         from flexget import validator
         d = validator.factory('dict')
-        d.accept('text',key='username')
-        d.accept('text',key='password')
-        d.accept('text',key='path')
+        d.accept('text', key='username')
+        d.accept('text', key='password')
+        d.accept('text', key='path')
+        d.accept('list', key='messages').accept('text')
         return d
 
     def on_process_start(self, feed):
@@ -52,24 +59,45 @@ class Itasa(object):
             for url in urls:
                 with closing(self.opener.open(url)) as page:
                     try:
-                        z = self._zip(page)
+                        content = page.read()
+                        z = self._zip(content)
                         filename = z.headers.dict['content-disposition'].split('=')[1]
                         filename = os.path.join(self.config['path'],filename)
                         filename = os.path.expanduser(filename)
                         with open(filename,'wb') as f:
                             f.write(z.read())
                             entry['output']=filename
+                        if 'messages' in self.config :
+                            self._post_comment(content,page.geturl())
                     except ValueError:
                         print("Missing subtitle link in page: %s" % page.geturl())
 
-    def _zip(self,page):
+    def _zip(self,content):
         '''extract zip subtitle link from page, open download zip link'''
-        content = page.read()
         start = content.index('<center><a href="')
         end = content.index('" rel',start)
         url = content[start+17:end]
         return self.opener.open(url)
 
+    def _post_comment(self,content,url):
+        soup = BeautifulSoup(content)
+        form = soup.find(id='jc_commentForm')
+        arg2_dict = []
+        for inputTag in form.findAll('input'):
+            if not inputTag['name'] == 'jc_name':
+                arg2_dict.append([inputTag['name'],inputTag['value'] if inputTag.has_key('value') else None])
+
+        m = self.config['messages']
+        arg2_dict.append(['jc_comment',m[random.randint(0,len(m)-1)]  ])
+        arg2_dict.append(['jc_name',self.config['username']])
+
+        data = { 'arg2': json.dumps(arg2_dict)
+            , 'func'   : "jcxAddComment"
+            , 'task'   : "azrul_ajax"
+            , 'no_html': 1
+            , 'option' : "jomcomment"}
+        
+        return self.opener.open(url,urllib.urlencode(data))
 
 try:
     from flexget.plugin import register_plugin
