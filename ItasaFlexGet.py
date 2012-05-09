@@ -28,6 +28,7 @@ class Itasa(object):
         d.accept('text',key='username')
         d.accept('text',key='password')
         d.accept('text',key='path')
+        d.accept('list',key='messages').accept('text')
         return d
 
     def on_process_start(self, feed):
