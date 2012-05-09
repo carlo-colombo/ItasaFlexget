@@ -24,3 +24,5 @@ feeds:
         - Grazie mille!!!
         - Mitici
 ```
+
+Optional parameter messages: plugin will post a message on subtitle page, message will be choose amongst configured messages
