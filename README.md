@@ -32,7 +32,7 @@ Features
 * Extracted fields:
   * title
   * output _downloaded zip path_
-  * series_name _Itasa version_
+  * series\_name _Itasa version_
   * series_season
   * series_episode
 
