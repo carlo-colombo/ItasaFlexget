@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Itasaflexget by carlo-colombo</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Itasaflexget</h1>
+        <p>Flexget Itasa Plugin</p>
+        <p class="view"><a href="https://github.com/carlo-colombo/ItasaFlexget">View the Project on GitHub <small>carlo-colombo/ItasaFlexget</small></a></p>
+        <ul>
+          <li><a href="https://github.com/carlo-colombo/ItasaFlexget/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/carlo-colombo/ItasaFlexget/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/carlo-colombo/ItasaFlexget">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Itasa Flexget plugin</h1>
+
+<ul>
+<li>
+<a href="http://www.flexget.com">Flexget</a> </li>
+<li><a href="http://italiansubs.net">Itasa</a></li>
+<li><a href="http://www.italiansubs.net/forum/hardware-software/itasa-flexget-plugin/">ItasaFlexget forum post on Itasa</a></li>
+</ul><h2>Install</h2>
+
+<p>Drop <code>ItasaFlexGet.py</code> in <code>~/.flexget/plugins</code></p>
+
+<h2>Flexget config.yml examples</h2>
+
+<pre><code>feeds:
+  myitasa:
+    rss: http://www.italiansubs.net/index.php?option=com_rsssub...  #myitasa or itasa subtitle feed
+    accept_all: yes  #accept all from myitasa                                               
+    itasa:
+      username: itasaUsername
+      password: itasaPassword
+      path: ~/subtitle/download/folder # absolute or starting from $HOME
+      messages:
+        - Grazie
+        - Grazie mille!!!
+        - Mitici
+</code></pre>
+
+<h2>Features</h2>
+
+<ul>
+<li>Optional parameter messages: plugin will post a message on subtitle page, message will be choose amongst configured messages.</li>
+<li>Extracted fields:
+
+<ul>
+<li>title</li>
+<li>output <em>downloaded zip path</em>
+</li>
+<li>series_name <em>Itasa version</em>
+</li>
+<li>series_season</li>
+<li>series_episode</li>
+</ul>
+</li>
+</ul><h2>Test</h2>
+
+<p><code>python2 -m unittest test</code>
+Test will ask for itasa username and password</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/carlo-colombo">carlo-colombo</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    
+  </body>
+</html>
