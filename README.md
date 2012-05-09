@@ -25,9 +25,11 @@ feeds:
         - Mitici
 ```
 
+Features
+---------------------------
+Optional parameter messages: plugin will post a message on subtitle page, message will be choose amongst configured messages.
+
 Test
 ----------------------------
 `python2 -m unittest test`
 Test will ask for itasa username and password
-
-Optional parameter messages: plugin will post a message on subtitle page, message will be choose amongst configured messages.
