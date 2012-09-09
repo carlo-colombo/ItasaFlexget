@@ -1,5 +1,5 @@
-Itasa Flexget plugin
-====================
+Itasa Flexget plugin (v 1.2.1)
+==============================
 
 - [Flexget](http://www.flexget.com) 
 - [Itasa](http://italiansubs.net)
