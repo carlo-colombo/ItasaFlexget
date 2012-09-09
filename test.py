@@ -13,7 +13,7 @@ class ItasaFlexgetTests(unittest.TestCase):
             ,'http://www.italiansubs.net/index.php?option=com_remository&Itemid=6&func=fileinfo&id=1789'
             ,u'Stargate SG1 9x01'
             ,u'Stargate SG1',u'9',u'01'),
-        ('Knight.Rider.2008.s01e08.sub.itasa.zip'
+        ('Knight.Rider.2008.s01e16.sub.itasa.zip'
             ,'http://www.italiansubs.net/index.php?option=com_remository&Itemid=6&func=fileinfo&id=8269'
             ,u'Knight Rider 2008 - 1x16'
             ,u'Knight Rider 2008',u'1',u'16'),
@@ -69,11 +69,12 @@ class ItasaFlexgetTests(unittest.TestCase):
         ifg.on_feed_download(self.feed)
 
     def test_html_parsing(self):
+        from BeautifulSoup import BeautifulSoup
         ifg = Itasa()
         self.feed.config['itasa']['messages']=['Thank you','Thx']
         ifg.on_process_start(self.feed)
         with closing(ifg.opener.open(self.test_item[1])) as page:
-            ifg._post_comment(page.read(),page.geturl())
+            ifg._post_comment(BeautifulSoup(page.read()),page.geturl())
 
     def tearDown(self):
         '''remove downloaded test item from current directory'''
