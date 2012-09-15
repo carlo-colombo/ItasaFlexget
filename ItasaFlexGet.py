@@ -50,7 +50,7 @@ class Itasa(object):
                 raise Exception("Wrong user or password")
 
     def on_task_download(self,feed):
-        on_feed_download(self,feed)
+        self.on_feed_download(feed)
     
     def on_task_download(self,feed):
         '''download zip file'''
