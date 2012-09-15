@@ -9,6 +9,10 @@ Install
 -------
 Drop `ItasaFlexGet.py` in `~/.flexget/plugins`
 
+Flexget compatibility
+---------------------
+Both last and older version, both download phase method (on_feed_download, on_task_download)
+
 Flexget config.yml examples
 ---------------------------
 ```
