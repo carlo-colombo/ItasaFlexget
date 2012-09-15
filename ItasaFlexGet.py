@@ -49,7 +49,10 @@ class Itasa(object):
             if page.read().find('Nome utente e password non sono corrette') != -1:
                 raise Exception("Wrong user or password")
 
-    def on_feed_download(self,feed):
+    def on_task_download(self,feed):
+        on_feed_download(self,feed)
+    
+    def on_task_download(self,feed):
         '''download zip file'''
         for entry in feed.entries:
             if entry.get('urls'):
