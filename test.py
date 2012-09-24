@@ -15,8 +15,8 @@ class ItasaFlexgetTests(unittest.TestCase):
             ,u'Stargate SG1',u'9',u'01'),
         ('Knight.Rider.2008.s01e16.sub.itasa.zip'
             ,'http://www.italiansubs.net/index.php?option=com_remository&Itemid=6&func=fileinfo&id=8269'
-            ,u'Knight Rider 2008 - 1x16'
-            ,u'Knight Rider 2008',u'1',u'16'),
+            ,u'Knight Rider 2008 - 1x08'
+            ,u'Knight Rider 2008',u'1',u'08'),
         ('Six.Feet.Under.s04e05.sub.itasa.zip'
             ,'http://www.italiansubs.net/index.php?option=com_remository&Itemid=6&func=fileinfo&id=148'
             ,u'Six Feet Under 4x05'
@@ -40,7 +40,7 @@ class ItasaFlexgetTests(unittest.TestCase):
     def test_download(self):
         ifg = Itasa()
         ifg.on_process_start(self.feed)
-        ifg.on_feed_download(self.feed)
+        ifg.on_task_download(self.feed)
         self.assertTrue(os.path.exists(self.test_item[0]))
 
     def test_output_field(self):
