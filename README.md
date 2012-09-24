@@ -1,4 +1,4 @@
-Itasa Flexget plugin (v 1.3.0)
+Itasa Flexget plugin (v 1.3.1)
 ==============================
 
 - [Flexget](http://www.flexget.com) 
@@ -8,6 +8,10 @@ Itasa Flexget plugin (v 1.3.0)
 Install
 -------
 Drop `ItasaFlexGet.py` in `~/.flexget/plugins`
+
+Flexget compatibility
+---------------------
+Both last and older version, both download phase method (on_feed_download, on_task_download)
 
 Flexget config.yml examples
 ---------------------------
