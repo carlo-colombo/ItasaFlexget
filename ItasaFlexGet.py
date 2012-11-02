@@ -84,8 +84,8 @@ class Itasa(object):
             show_data = m.groups()
             entry['title'] = title.strip()
             entry['series_name'] = show_data[0].strip()
-            entry['series_season'] = show_data[1].strip()
-            entry['series_episode'] = show_data[2].strip()
+            entry['series_season'] = int(show_data[1].strip())
+            entry['series_episode'] = int(show_data[2].strip())
 
     def _zip(self,content):
         '''extract zip subtitle link from page, open download zip link'''
