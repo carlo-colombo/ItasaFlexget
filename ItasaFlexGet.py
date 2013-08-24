@@ -21,6 +21,11 @@ class Itasa(object):
         - Mitici
     """
 
+    def getToken(self, contentHtml):
+        reg = re.compile('<input type="hidden" name="([a-zA-z0-9]{32})" value="1"')
+        value = reg.search(contentHtml).group(1)
+        return value
+
     def validator(self):
         '''validator'''
         from flexget import validator
@@ -37,14 +42,18 @@ class Itasa(object):
 
         cj = cookielib.CookieJar()
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+	self.opener.addheaders = [('User-agent', 'Mozilla/5.0'), ('Referer', BASE_PATH.rstrip('index.php'))]
+	response = self.opener.open(BASE_PATH)
+	content = response.read()
+	token = self.getToken(content)
         login_data = urllib.urlencode({'username' : self.config['username']
                                , 'passwd' : self.config['password']
                                , 'Submit' :'Login'
-                               , 'silent' : True
+                               , 'silent' : 'true'
                                , 'option' : 'com_user'
                                , 'task'   : 'login'
+			       , token : '1'
                                , 'remember':'yes'})
-        
         with closing(self.opener.open(BASE_PATH, login_data)) as page:
             if page.read().find('Nome utente e password non sono corrette') != -1:
                 raise Exception("Wrong user or password")
