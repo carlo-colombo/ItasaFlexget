@@ -1,4 +1,4 @@
-Itasa Flexget plugin (v 1.3.1)
+Itasa Flexget plugin (v 1.3.2)
 ==============================
 
 - [Flexget](http://www.flexget.com) 
